@@ -1,7 +1,5 @@
 import React from 'react';
 import axios from 'axios';
-import '../../index.css';
-import Profile from '../Profile';
 
 const loginURL = 'http://localhost:5000/api/users/login';
 
@@ -10,24 +8,18 @@ export default class Login extends React.Component {
     super(props);
 
     this.state = {
-      email: 'test@test.com',
-      password: '11223344',
+      email: '',
+      password: '',
       errors: null,
-      token: null,
-      isLoggedIn: false,
     };
   }
 
-  formEmail = (event) => {
-    this.setState({ email: event.target.value });
-  }
-
-  formPasssword = (event) => {
-    this.setState({ password: event.target.value });
-  }
-
-  handleLoginClick() {
-    this.setState({ isLoggedIn: true });
+  updateForm = (event) => {
+    const newState = {}
+    newState[event.target.id] = event.target.value;
+    this.setState({
+      ...newState
+    })
   }
 
   submitUser = (event) => {
@@ -35,13 +27,10 @@ export default class Login extends React.Component {
     axios.post(loginURL, {
       ...this.state,
     }).then(res => {
-      const token = res.data.token
-      console.log(token);
-      localStorage.setItem('token', token);
-
+      localStorage.setItem('token', res.data.token);
+      this.props.handleDisplayedComponent("profile");
     }).catch(err => {
       const errors = err.response.data;
-      console.log(errors);
       this.setState({email: '', password: '', errors: errors});
     })
   }
@@ -49,23 +38,38 @@ export default class Login extends React.Component {
   messsageError = () => {
       if (this.state.errors) {
         return <p>Incorrect email or password</p>
-      } else {
-        // return <Profile />
       }
+  }
+
+  handleLoginClick = () => {
+    this.props.handleDisplayedComponent("registration");
   }
 
   render() {
     return (
-      <form onSubmit={this.submitUser}>
+      <form onSubmit={this.submitUser} className="loginForm-container">
         {this.messsageError()}
-        <label>
-          email
-  <p><input value={this.state.email} onChange={this.formEmail} /></p>
-          password
-          <p><input value={this.state.password} onChange={this.formPasssword} /></p>
+        <label htmlFor="email" className="loginForm__label"> <span>Email</span>
+        <input id="email" value={this.state.email} onChange={this.updateForm} className="loginForm__input" placeholder='enter your email' />
         </label>
-        <input type="submit" value="login" />
+        <br/>
+        <label htmlFor="password" className="loginForm__label"><span>Password</span>
+        <input id="password" value={this.state.password} onChange={this.updateForm} className="loginForm__input" placeholder='enter your password' />
+        </label>
+        <br/>
+        <label className="loginForm__button">
+        <input type="submit" value="Login" />
+        <LoginButton onClick={this.handleLoginClick}/>
+        </label>
       </form>
     );
   }
+}
+
+function LoginButton(props) {
+  return (
+    <p><button onClick={props.onClick}>
+      Not registered?
+    </button></p>
+  );
 }

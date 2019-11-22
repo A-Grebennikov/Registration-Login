@@ -1,24 +1,29 @@
 import React from 'react';
 import axios from 'axios';
 import '../../index.css';
-import Wrapper from '../Wrapper';
+import { createID } from '../helpers';
+const jwtDecode = require('jwt-decode');
 
 export default class Profile extends React.Component {
   constructor(props) {
     super(props);
     this.handleLogoutClick = this.handleLogoutClick.bind(this);
     this.state = {
-      isLogout: false,
+      username: '',
       usernames: []
     };
   }
 
   componentDidMount() {
     let token = localStorage.getItem('token');
+    const decoded = jwtDecode(token);   //get name from decrypted token 
+    console.log('name from token:', decoded.name);
+    this.setState({ username: decoded.name })
+
+
     axios.get('http://localhost:5000/api/users/username', { 'headers': { 'authorization': token } })
       .then(response => {
-        this.setState({ usernames: response.data })
-        console.log('res', response.data);
+        this.setState({ usernames: response.data }) // set username
       })
       .catch((error) => {
         console.log('errr', error.response);
@@ -26,47 +31,37 @@ export default class Profile extends React.Component {
   }
 
   handleLogoutClick() {
-    this.setState({ isLogout: true });
+    console.log(this.props);
+    this.props.handleDisplayedComponent("login");
+    localStorage.removeItem('token');
   }
 
   renderUsernames() {
     return this.state.usernames.map(item => (
-      <li key={item.toString()}>{item.name}</li>
+      <li key={createID("name")}>{item.name}</li>
     ))
   }
 
   render() {
-    const isLogout = this.state.isLogout;
-    let button;
-    if (!isLogout) {
-      button = <LogoutButton onClick={this.handleLogoutClick} />;
-    }
+    //rebnder username
+    //span all users label
     return (
       <div>
-        List of registered users
+        <h2>Hello, {this.state.username}</h2>
+        <h3> List of registered Users</h3>
         <ul>
-        {this.renderUsernames()}
+          {this.renderUsernames()}
         </ul>
-        <p><ExitFromProfile isLogout={isLogout} /></p>
-        {button}
+        <LogoutButton onClick={this.handleLogoutClick} />
       </div>
     )
   }
 }
 
-function ExitFromProfile(props) {
-  const isLogout = props.isLogout;
-  if (isLogout) {
-    localStorage.removeItem('token');
-    return <Wrapper />;
-  }
-  return <p></p>
-}
-
 function LogoutButton(props) {
   return (
-    <p><button onClick={props.onClick}>
-      logout
-    </button></p>
+    <button onClick={props.onClick}>
+      Logout
+    </button>
   );
 }
