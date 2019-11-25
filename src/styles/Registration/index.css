@@ -1,0 +1,19 @@
+ .loginForm-container {
+  
+  margin: 0 auto;
+  width: 100%;
+  max-width: 300px;
+}
+
+.loginForm-container .loginForm__label {
+  display: flex;
+  justify-content: space-between;
+}
+
+.loginForm-container .loginForm__input {
+  margin-right: 0;
+}
+
+.loginForm-container .loginForm__button {
+  justify-content: space-between;
+}  

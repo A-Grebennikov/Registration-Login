@@ -1,60 +1,42 @@
 import React from 'react';
 import Login from '../Login';
 import Registration from '../Registration';
+import Profile from '../Profile';
 
 export default class Wrapper extends React.Component {
   constructor(props) {
     super(props);
-    this.handleLoginClick = this.handleLoginClick.bind(this);
-    this.handleRegistrationClick = this.handleRegistrationClick.bind(this);
-    this.state = { isLoggedIn: false };
+    this.state = { 
+      displayedComponent: "login",
+    };
   }
 
-  handleLoginClick() {
-    this.setState({ isLoggedIn: true });
-  }
-
-  handleRegistrationClick() {
-    this.setState({ isLoggedIn: false });
+  handleDisplayedComponent = (component) => {
+    this.setState({ displayedComponent: component})
   }
 
   render() {
-    const isLoggedIn = this.state.isLoggedIn;
-    let button;
-    if (isLoggedIn) {
-      button = <RegistrationButton onClick={this.handleRegistrationClick} />;
-    } else {
-      button = <LoginButton onClick={this.handleLoginClick} />;
-    }
+    const { displayedComponent } = this.state;
     return (
       <div>
-        <Authentification isLoggedIn={isLoggedIn} />
-        {button}
+        <Authentification
+         displayedComponent={displayedComponent}
+         handleDisplayedComponent={this.handleDisplayedComponent} 
+         />
       </div>
     )
   }
 }
 
 function Authentification(props) {
-  const isLoggedIn = props.isLoggedIn;
-  if (isLoggedIn) {
-    return <Registration />;
+  const { displayedComponent } = props;
+  switch(displayedComponent){
+    case "login":
+       return <Login {...props}/>;
+    case "registration":
+       return <Registration {...props}/>; 
+    case "profile":
+        return <Profile {...props}/>; 
+       default: return ;
   }
-  return <Login />;
-}
-
-function LoginButton(props) {
-  return (
-    <p><button onClick={props.onClick}>
-      Not registered?
-    </button></p>
-  );
-}
-
-function RegistrationButton(props) {
-  return (
-    <p><button onClick={props.onClick}>
-      Already registered?
-    </button></p>
-  );
 }

@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import '../../index.css';
+import { createID } from '../helpers';
 
 const registrationURL = 'http://localhost:5000/api/users/registration';
 
@@ -8,46 +9,36 @@ export default class Registration extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: 'Test',
-      email: 'test@test.com',
-      password: '11223344',
-      password2: '11223344',
-      displayComponent: '',
+      // name: 'Test',
+      // email: 'test@test.com',
+      // password: '11223344',
+      // password2: '11223344',
+      name: '',
+      email: '',
+      password: '',
+      password2: '',
       errors: null,
     };
   }
 
-  formName = (event) => {
+  updateForm = (event) => {
+    const newState = {}
+    newState[event.target.id] = event.target.value;
     this.setState({
-      name: event.target.value
+      ...newState
     })
-  };
+  }
 
-  formEmail = (event) => {
-    this.setState({
-      email: event.target.value
-    })
-  };
-
-  formPassword = (event) => {
-    this.setState({
-      password: event.target.value
-    })
-  };
-
-  formPassword2 = (event) => {
-    this.setState({
-      password2: event.target.value
-    })
-  };
+  handleLoginClick = () => {
+    this.props.handleDisplayedComponent("login");
+  }
 
   submitUser = (event) => {
-    console.log(this.state);
     event.preventDefault();
     axios.post(registrationURL, {
       ...this.state,
     }).then(res => {
-      console.log(res)
+    this.handleLoginClick();
     }).catch(err => {
       const errors = err.response.data;
       console.log(errors)
@@ -63,27 +54,40 @@ export default class Registration extends React.Component {
         arrOfErr.push({ err: errors[key] })
       }
       return arrOfErr.map(item => (
-      <li>{item.err}</li>
+      <li key={createID("name")}>{item.err}</li>
       ))
     }
   }
 
   render() {
     return (
-      <form onSubmit={this.submitUser}>
+      <form onSubmit={this.submitUser} className="loginForm-container">
         {this.messsageError()}
-        <label>
-          name
-          <p><input value={this.state.name} onChange={this.formName} /></p>
-          email
-          <p><input value={this.state.email} onChange={this.formEmail} /></p>
-          password
-          <p><input value={this.state.password} onChange={this.formPassword} /></p>
-          confirm password
-          <p><input value={this.state.password2} onChange={this.formPassword2} /></p>
+        <label htmlFor="name" className="loginForm__label"> <span>Name</span>
+        <input id="name" value={this.state.name} onChange={this.updateForm} className="loginForm__input" placeholder='enter your name' />
         </label>
-        <input type="submit" value="registration" />
+        <label htmlFor="email" className="loginForm__label"> <span>Email</span>
+        <input id="email" value={this.state.email} onChange={this.updateForm} className="loginForm__input" placeholder='enter your email'/>
+        </label>
+        <label htmlFor="password" className="loginForm__label"> <span>Password</span>
+        <input id="password" value={this.state.password} onChange={this.updateForm} className="loginForm__input" placeholder='enter password'/>
+        </label>
+        <label htmlFor="password2" className="loginForm__label"> <span>Password2</span>
+        <input id="password2" value={this.state.password2} onChange={this.updateForm} className="loginForm__input" placeholder='repeat password'/>
+        </label>
+        <label className="loginForm__button">
+        <input type="submit" value="Registration" className="loginForm__button_item"/>
+        <RegistrationButton onClick={this.handleLoginClick} className="loginForm__button_item"/>
+        </label>
       </form>
     );
   }
+}
+
+function RegistrationButton(props) {
+  return (
+    <button onClick={props.onClick}>
+      Already registered?
+    </button>
+  );
 }

@@ -1,3 +1,10 @@
+#root {
+  margin: 0 auto;
+  margin-top: 50px;
+  width: 100%;
+  max-width: 500px;
+}
+
 .App {
   text-align: center;
 }
@@ -19,4 +26,12 @@
 
 .App-link {
   color: #09d3ac;
+}
+
+body {
+  font-size: 20;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
 }
