@@ -1,5 +1,8 @@
 import React from 'react';
 import axios from 'axios';
+import '../../index.css';
+
+const registrationURL = 'http://localhost:5000/api/users/registration';
 
 export default class Registration extends React.Component {
   constructor(props) {
@@ -10,7 +13,7 @@ export default class Registration extends React.Component {
       password: '11223344',
       password2: '11223344',
       displayComponent: '',
-      errors: {},
+      errors: null,
     };
   }
 
@@ -41,22 +44,34 @@ export default class Registration extends React.Component {
   submitUser = (event) => {
     console.log(this.state);
     event.preventDefault();
-    axios.post('http://localhost:5000/api/users/registration', {
+    axios.post(registrationURL, {
       ...this.state,
     }).then(res => {
-      const token = res.data.token
-      console.log(token)
-
-
+      console.log(res)
     }).catch(err => {
       const errors = err.response.data;
       console.log(errors)
+      this.setState({errors})
     })
+  }
+
+  messsageError = () => {
+    const { errors } = this.state;
+    if (errors) {
+      const arrOfErr = [];
+      for (let key in errors) {
+        arrOfErr.push({ err: errors[key] })
+      }
+      return arrOfErr.map(item => (
+      <li>{item.err}</li>
+      ))
+    }
   }
 
   render() {
     return (
       <form onSubmit={this.submitUser}>
+        {this.messsageError()}
         <label>
           name
           <p><input value={this.state.name} onChange={this.formName} /></p>
