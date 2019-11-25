@@ -1,19 +1,16 @@
- .loginForm-container {
-  
-  margin: 0 auto;
-  width: 100%;
-  max-width: 300px;
-}
-
-.loginForm-container .loginForm__label {
+.registrationForm-container {
+  font-family: Tahoma;
+  font-size: 16px;
+  font-family: Tahoma;
+  width: 400px;
+  height: 450px;
+  background-color: #FFFFFF;
+  border-radius: 3px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.5);
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: space-around;
+  align-items: center;
+  color: rgba(1,1,1,0.7);
 }
-
-.loginForm-container .loginForm__input {
-  margin-right: 0;
-}
-
-.loginForm-container .loginForm__button {
-  justify-content: space-between;
-}  

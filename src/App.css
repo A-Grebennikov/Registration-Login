@@ -1,8 +1,12 @@
 #root {
-  margin: 0 auto;
-  margin-top: 50px;
-  width: 100%;
-  max-width: 500px;
+  width:100%;
+  height:100vh;
+  background: #C0C0C0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: Tahoma;
+  font-size: 16px;
 }
 
 .App {
@@ -31,7 +35,11 @@
 body {
   font-size: 20;
 }
+h1 {
+  font-size: 25px;
+}
 
 h1, h2, h3, h4, h5, h6 {
   margin: 0;
 }
+
