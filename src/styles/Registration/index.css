@@ -3,7 +3,7 @@
   font-size: 16px;
   font-family: Tahoma;
   width: 400px;
-  height: 450px;
+  height: 420px;
   background-color: #FFFFFF;
   border-radius: 3px;
   box-shadow: 0 0 10px rgba(0,0,0,0.5);
@@ -12,5 +12,6 @@
   flex-wrap: nowrap;
   justify-content: space-around;
   align-items: center;
+  padding: 20px 0;
   color: rgba(1,1,1,0.7);
 }
