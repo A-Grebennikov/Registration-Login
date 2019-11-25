@@ -48,18 +48,16 @@ export default class Login extends React.Component {
   render() {
     return (
       <form onSubmit={this.submitUser} className="loginForm-container">
-        {this.messsageError()}
+        <label className="loginForm__areaError">{this.messsageError()}</label>
         <label htmlFor="email" className="loginForm__label"> <span>Email</span>
         <input id="email" value={this.state.email} onChange={this.updateForm} className="loginForm__input" placeholder='enter your email' />
         </label>
-        <br/>
         <label htmlFor="password" className="loginForm__label"><span>Password</span>
         <input id="password" value={this.state.password} onChange={this.updateForm} className="loginForm__input" placeholder='enter your password' />
         </label>
-        <br/>
         <label className="loginForm__button">
-        <input type="submit" value="Login" />
-        <LoginButton onClick={this.handleLoginClick}/>
+        <input type="submit" value="Login" className="loginForm__button_item"/>
+        <LoginButton onClick={this.handleLoginClick} className="loginForm__button_item"/>
         </label>
       </form>
     );
@@ -68,8 +66,8 @@ export default class Login extends React.Component {
 
 function LoginButton(props) {
   return (
-    <p><button onClick={props.onClick}>
+    <button onClick={props.onClick}>
       Not registered?
-    </button></p>
+    </button>
   );
 }

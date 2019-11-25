@@ -9,10 +9,14 @@ export default class Registration extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: 'Test',
-      email: 'test@test.com',
-      password: '11223344',
-      password2: '11223344',
+      // name: 'Test',
+      // email: 'test@test.com',
+      // password: '11223344',
+      // password2: '11223344',
+      name: '',
+      email: '',
+      password: '',
+      password2: '',
       errors: null,
     };
   }
@@ -57,30 +61,24 @@ export default class Registration extends React.Component {
 
   render() {
     return (
-      <form onSubmit={this.submitUser}>
+      <form onSubmit={this.submitUser} className="loginForm-container">
         {this.messsageError()}
-        <label htmlFor="name"> Name
-        <br/>
-        <input id="name" value={this.state.name} onChange={this.updateForm} />
+        <label htmlFor="name" className="loginForm__label"> <span>Name</span>
+        <input id="name" value={this.state.name} onChange={this.updateForm} className="loginForm__input" placeholder='enter your name' />
         </label>
-        <br/>
-        <label htmlFor="email"> Email
-        <br/>
-        <input id="email" value={this.state.email} onChange={this.updateForm} />
+        <label htmlFor="email" className="loginForm__label"> <span>Email</span>
+        <input id="email" value={this.state.email} onChange={this.updateForm} className="loginForm__input" placeholder='enter your email'/>
         </label>
-        <br/>
-        <label htmlFor="password"> Password
-        <br/>
-        <input id="password" value={this.state.password} onChange={this.updateForm} />
+        <label htmlFor="password" className="loginForm__label"> <span>Password</span>
+        <input id="password" value={this.state.password} onChange={this.updateForm} className="loginForm__input" placeholder='enter password'/>
         </label>
-        <br />
-        <label htmlFor="password2"> Password2
-        <br/>
-        <input id="password2" value={this.state.password2} onChange={this.updateForm} />
+        <label htmlFor="password2" className="loginForm__label"> <span>Password2</span>
+        <input id="password2" value={this.state.password2} onChange={this.updateForm} className="loginForm__input" placeholder='repeat password'/>
         </label>
-        <br/>
-        <input type="submit" value="Registration" />
-        <RegistrationButton onClick={this.handleLoginClick} />
+        <label className="loginForm__button">
+        <input type="submit" value="Registration" className="loginForm__button_item"/>
+        <RegistrationButton onClick={this.handleLoginClick} className="loginForm__button_item"/>
+        </label>
       </form>
     );
   }
@@ -88,8 +86,8 @@ export default class Registration extends React.Component {
 
 function RegistrationButton(props) {
   return (
-    <p><button onClick={props.onClick}>
+    <button onClick={props.onClick}>
       Already registered?
-    </button></p>
+    </button>
   );
 }

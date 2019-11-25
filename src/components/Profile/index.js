@@ -43,8 +43,6 @@ export default class Profile extends React.Component {
   }
 
   render() {
-    //rebnder username
-    //span all users label
     return (
       <div>
         <h2>Hello, {this.state.username}</h2>
