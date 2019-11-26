@@ -2,8 +2,10 @@
   font-family: Tahoma;
   font-size: 16px;
   font-family: Tahoma;
-  width: 35%;
-  height: 60%;
+  width: 350px;
+  height: 500px;
+  /* width: 35%;
+  height: 60%; */
   background-color: #FFFFFF;
   border-radius: 3px;
   box-shadow: 0 0 10px rgba(0,0,0,0.5);
@@ -35,8 +37,9 @@
   margin-top: auto;
 }
 
+
 .userList-list {
-  width: 80%;
+  width: 90%;
   height: 80%;
   list-style-type: none;
   padding: 20px;
@@ -44,6 +47,13 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+  margin: 15px;
+  scrollbar-width: none;
+}
+
+.userList-list::-webkit-scrollbar {
+  display: none;
+  width: 0 !important 
 }
 
 .Main {
@@ -51,11 +61,20 @@
   justify-content: space-between;
   font-family: inherit;
   font-size: 16px;
+  padding: 10px;
+  border-radius: 3px;
+  margin: 5px;
+  background-color: rgba(1,1,1,0.06);
+  box-shadow: 0 0 5px rgba(0,0,0,0.3);
 }
 
 .data {
   align-self: center;
   width: 70%;
+}
+.data > div, 
+.data > span {
+  margin: 5px 0;
 }
 
 .logoProfile {
@@ -71,6 +90,9 @@
 .email {
   display: flex;
   flex-wrap: nowrap;
+}
+.email > img{
+  margin: 0 5px 0 0;
 }
 
 .line {

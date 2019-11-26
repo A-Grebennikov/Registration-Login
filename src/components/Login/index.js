@@ -50,10 +50,10 @@ export default class Login extends React.Component {
       <form onSubmit={this.submitUser} className="loginForm-container">
         <h1>Login</h1>
         <label htmlFor="email" className="commonForm__label">
-        <input id="email" value={this.state.email} onChange={this.updateForm} className={`commonForm__input ${this.state.errors ? 'error': ''}`} placeholder='e-mail' />
+        <input id="email" value={this.state.email} onChange={this.updateForm} className={`commonForm__input ${this.state.errors ? 'error': ''}`} placeholder='e-mail' autocomplete="off" />
         </label>
         <label htmlFor="password" className="commonForm__label">
-        <input id="password" value={this.state.password} onChange={this.updateForm} className={`commonForm__input ${this.state.errors ? 'error': ''}`} placeholder='password' />
+        <input id="password" type="password" value={this.state.password} onChange={this.updateForm} className={`commonForm__input ${this.state.errors ? 'error': ''}`} placeholder='password' />
         <span className="error-message">
           {this.messsageError()}
         </span>

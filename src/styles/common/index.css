@@ -6,6 +6,11 @@
   margin: 5px 0;
 }
 
+/* .wrapper {
+  height: 100%;
+  width: 100%;
+} */
+
 .commonForm__input {
   border: 1px solid #cccccc;
   border-radius: 3px;

@@ -42,10 +42,10 @@ export default class Profile extends React.Component {
           <img className="logoProfile" src="http://s1.iconbird.com/ico/2013/11/504/w128h1281385326502profle.png" />
         </div>
         <div className="data">
-          <li className="name" key={createID("name")}>{item.name}</li>
+          <span className="name" key={createID("name")}>{item.name}</span>
           <div className="email">
             <img className="logoEmail" src="https://cdn.icon-icons.com/icons2/788/PNG/512/email_icon-icons.com_64925.png" />
-            <span> email</span>
+            <span> {item.email}</span>
           </div>
         </div>
       </div>
@@ -56,10 +56,9 @@ export default class Profile extends React.Component {
     return (
       <div className="userList-container">
         <h1 className="headerList"> List of registered Users</h1>
-        <ul className="userList-list">
+        <div className="userList-list">
           {this.renderUsernames()}
-          <div class="line"></div>
-        </ul>
+        </div>
         <LogoutButton onClick={this.handleLogoutClick} />
       </div>
     )
