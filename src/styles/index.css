@@ -1,4 +1,5 @@
-@import './Common/index.css';
+@import './common/reset.css';
+@import './common/index.css';
 @import './Login/index.css';
 @import './Profile/index.css';
-@import './Registration/index.css'
+@import './Registration/index.css';

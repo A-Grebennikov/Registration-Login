@@ -6,10 +6,16 @@ import Profile from '../Profile';
 export default class Wrapper extends React.Component {
   constructor(props) {
     super(props);
+    let displayedComponent = "login";
+    let token = localStorage.getItem('token');
+    if (token) displayedComponent = "profile";
+
     this.state = { 
-      displayedComponent: "login",
+      displayedComponent: displayedComponent,
     };
   }
+
+
 
   handleDisplayedComponent = (component) => {
     this.setState({ displayedComponent: component})
@@ -18,7 +24,7 @@ export default class Wrapper extends React.Component {
   render() {
     const { displayedComponent } = this.state;
     return (
-      <div>
+      <div className="wrapper">
         <Authentification
          displayedComponent={displayedComponent}
          handleDisplayedComponent={this.handleDisplayedComponent} 

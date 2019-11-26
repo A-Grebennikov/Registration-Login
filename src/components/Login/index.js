@@ -37,7 +37,7 @@ export default class Login extends React.Component {
 
   messsageError = () => {
       if (this.state.errors) {
-        return <p>Incorrect email or password</p>
+        return "Incorrect email or password"
       }
   }
 
@@ -48,16 +48,19 @@ export default class Login extends React.Component {
   render() {
     return (
       <form onSubmit={this.submitUser} className="loginForm-container">
-        <label className="loginForm__areaError">{this.messsageError()}</label>
-        <label htmlFor="email" className="loginForm__label"> <span>Email</span>
-        <input id="email" value={this.state.email} onChange={this.updateForm} className="loginForm__input" placeholder='enter your email' />
+        <h1>Login</h1>
+        <label htmlFor="email" className="commonForm__label">
+        <input id="email" value={this.state.email} onChange={this.updateForm} className={`commonForm__input ${this.state.errors ? 'error': ''}`} placeholder='e-mail' autocomplete="off"/>
         </label>
-        <label htmlFor="password" className="loginForm__label"><span>Password</span>
-        <input id="password" value={this.state.password} onChange={this.updateForm} className="loginForm__input" placeholder='enter your password' />
+        <label htmlFor="password" className="commonForm__label">
+        <input id="password" type="password" value={this.state.password} onChange={this.updateForm} className={`commonForm__input ${this.state.errors ? 'error': ''}`} placeholder='password' />
+        <span className="error-message">
+          {this.messsageError()}
+        </span>
         </label>
-        <label className="loginForm__button">
         <input type="submit" value="Login" className="loginForm__button_item"/>
-        <LoginButton onClick={this.handleLoginClick} className="loginForm__button_item"/>
+        <label>
+        <span>Not registered?  </span><LoginButton onClick={this.handleLoginClick} className="loginForm__button_item"/>
         </label>
       </form>
     );
@@ -66,8 +69,8 @@ export default class Login extends React.Component {
 
 function LoginButton(props) {
   return (
-    <button onClick={props.onClick}>
-      Not registered?
-    </button>
+    <a href='#' onClick={props.onClick}>
+      Create an account
+    </a>
   );
 }
