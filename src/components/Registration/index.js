@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import '../../index.css';
 import { createID } from '../../helpers';
+import { Link } from 'react-router-dom'
 
 const registrationURL = 'http://localhost:5000/api/users/registration';
 
@@ -9,10 +10,6 @@ export default class Registration extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      // name: 'Test',
-      // email: 'test@test.com',
-      // password: '11223344',
-      // password2: '11223344',
       name: '',
       email: '',
       password: '',
@@ -34,16 +31,12 @@ export default class Registration extends React.Component {
     })
   }
 
-  handleLoginClick = () => {
-    this.props.handleDisplayedComponent("login");
-  }
-
   submitUser = (event) => {
     event.preventDefault();
     axios.post(registrationURL, {
       ...this.state,
     }).then(res => {
-      this.handleLoginClick();
+      this.props.history.push('/login')
     }).catch(err => {
       const errors = err.response.data;
       console.log(errors)
@@ -51,7 +44,7 @@ export default class Registration extends React.Component {
     })
   }
 
-  messsageError = () => {
+  messsageError() {
     const { errors } = this.state;
     if (errors) {
       const arrOfErr = [];
@@ -74,7 +67,6 @@ export default class Registration extends React.Component {
             {this.state.errors.name}
           </span>
         </label>
-
         <label htmlFor="email" className="commonForm__label">
           <input id="email" value={this.state.email} onChange={this.updateForm} className={`commonForm__input ${!this.state.errors.email === '' ? 'error' : ''}`} placeholder='e-mail' autocomplete="off" />
           <span className="error-message">
@@ -95,17 +87,11 @@ export default class Registration extends React.Component {
         </label>
         <input type="submit" value="SIGN ME UP" className="loginForm__button_item" />
         <label>
-          <span> Already registered?  </span> <RegistrationButton onClick={this.handleLoginClick} className="loginForm__button_item" />
+          <span> Already registered?  </span>
+          <Link to='/login'>Login</Link>
         </label>
       </form>
     );
   }
 }
 
-function RegistrationButton(props) {
-  return (
-    <a href='#' onClick={props.onClick}>
-      Login
-    </a>
-  );
-}

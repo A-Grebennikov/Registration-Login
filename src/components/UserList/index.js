@@ -4,47 +4,51 @@ import '../../index.css';
 import { createID } from '../../helpers';
 const jwtDecode = require('jwt-decode');
 
-export default class Profile extends React.Component {
+export default class UserList extends React.Component {
   constructor(props) {
     super(props);
     this.handleLogoutClick = this.handleLogoutClick.bind(this);
     this.state = {
       username: '',
-      usernames: []
+      usernames: [],
+
     };
   }
 
   componentDidMount() {
     let token = localStorage.getItem('token');
-    const decoded = jwtDecode(token);
-    this.setState({ username: decoded.name })
-
-
     axios.get('http://localhost:5000/api/users/username', { 'headers': { 'authorization': token } })
       .then(response => {
-        this.setState({ usernames: response.data })
+        const decoded = jwtDecode(token);
+        this.setState({ usernames: response.data, username: decoded.name })
       })
       .catch((error) => {
+        this.props.history.push('/login');
         console.log('errr', error.response);
       });
   }
 
   handleLogoutClick() {
     console.log(this.props);
-    this.props.handleDisplayedComponent("login");
+    this.props.handleLogin(false);
+    this.props.history.push('/login')
     localStorage.removeItem('token');
+  }
+
+  showUserProfile(id) {
+    this.props.history.push(`/profile/${id}`);
   }
 
   renderUsernames() {
     return this.state.usernames.map(item => (
-      <div className="profile-users">
+      <div className="profile-users" onClick={() => { this.showUserProfile(item._id) }}>
         <div>
-          <img className="logo-profile" src="http://s1.iconbird.com/ico/2013/11/504/w128h1281385326502profle.png" />
+          <img className="logo-profile" src="http://s1.iconbird.com/ico/2013/11/504/w128h1281385326502profle.png" alt='some value' />
         </div>
         <div className="users-data">
           <span className="users-data__name" key={createID("name")}>{item.name}</span>
           <div className="users-data__email">
-            <img className="logo-email" src="https://cdn.icon-icons.com/icons2/788/PNG/512/email_icon-icons.com_64925.png" />
+            <img className="logo-email" src="https://cdn.icon-icons.com/icons2/788/PNG/512/email_icon-icons.com_64925.png" alt='some value' />
             <span> {item.email}</span>
           </div>
         </div>
@@ -59,16 +63,10 @@ export default class Profile extends React.Component {
         <div className="userList__list">
           {this.renderUsernames()}
         </div>
-        <LogoutButton onClick={this.handleLogoutClick} />
+        <button onClick={this.handleLogoutClick} className="logout_button">
+          Logout
+        </button>
       </div>
     )
   }
-}
-
-function LogoutButton(props) {
-  return (
-    <button onClick={props.onClick} className="logout_button">
-      Logout
-    </button>
-  );
 }
