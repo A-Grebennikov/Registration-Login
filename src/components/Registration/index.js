@@ -1,7 +1,8 @@
 import React from 'react';
 import axios from 'axios';
 import '../../index.css';
-import { createID } from '../helpers';
+import { createID } from '../../helpers';
+import { Link } from 'react-router-dom'
 
 const registrationURL = 'http://localhost:5000/api/users/registration';
 
@@ -9,15 +10,16 @@ export default class Registration extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      // name: 'Test',
-      // email: 'test@test.com',
-      // password: '11223344',
-      // password2: '11223344',
       name: '',
       email: '',
       password: '',
       password2: '',
-      errors: null,
+      errors: {
+        email: null,
+        name: null,
+        password: null,
+        password2: null,
+      },
     };
   }
 
@@ -29,24 +31,20 @@ export default class Registration extends React.Component {
     })
   }
 
-  handleLoginClick = () => {
-    this.props.handleDisplayedComponent("login");
-  }
-
   submitUser = (event) => {
     event.preventDefault();
     axios.post(registrationURL, {
       ...this.state,
     }).then(res => {
-    this.handleLoginClick();
+      this.props.history.push('/login')
     }).catch(err => {
       const errors = err.response.data;
       console.log(errors)
-      this.setState({errors})
+      this.setState({ errors })
     })
   }
 
-  messsageError = () => {
+  messsageError() {
     const { errors } = this.state;
     if (errors) {
       const arrOfErr = [];
@@ -54,40 +52,46 @@ export default class Registration extends React.Component {
         arrOfErr.push({ err: errors[key] })
       }
       return arrOfErr.map(item => (
-      <li key={createID("name")}>{item.err}</li>
+        <li key={createID("name")}>{item.err}</li>
       ))
     }
   }
 
   render() {
     return (
-      <form onSubmit={this.submitUser} className="loginForm-container">
-        {this.messsageError()}
-        <label htmlFor="name" className="loginForm__label"> <span>Name</span>
-        <input id="name" value={this.state.name} onChange={this.updateForm} className="loginForm__input" placeholder='enter your name' />
+      <form onSubmit={this.submitUser} className="registrationForm-container">
+        <h1>Create an account</h1>
+        <label htmlFor="name" className="commonForm__label">
+          <input id="name" value={this.state.name} onChange={this.updateForm} className="commonForm__input" placeholder='name' autocomplete="off" />
+          <span className="error-message">
+            {this.state.errors.name}
+          </span>
         </label>
-        <label htmlFor="email" className="loginForm__label"> <span>Email</span>
-        <input id="email" value={this.state.email} onChange={this.updateForm} className="loginForm__input" placeholder='enter your email'/>
+        <label htmlFor="email" className="commonForm__label">
+          <input id="email" value={this.state.email} onChange={this.updateForm} className="commonForm__input" placeholder='e-mail' autocomplete="off" />
+          <span className="error-message">
+            {this.state.errors.email}
+          </span>
         </label>
-        <label htmlFor="password" className="loginForm__label"> <span>Password</span>
-        <input id="password" value={this.state.password} onChange={this.updateForm} className="loginForm__input" placeholder='enter password'/>
+        <label htmlFor="password" className="commonForm__label">
+          <input id="password" type="password" value={this.state.password} onChange={this.updateForm} className="commonForm__input" placeholder='password' />
+          <span className="error-message">
+            {this.state.errors.password}
+          </span>
         </label>
-        <label htmlFor="password2" className="loginForm__label"> <span>Password2</span>
-        <input id="password2" value={this.state.password2} onChange={this.updateForm} className="loginForm__input" placeholder='repeat password'/>
+        <label htmlFor="password2" className="commonForm__label">
+          <input id="password2" type="password" value={this.state.password2} onChange={this.updateForm} className="commonForm__input" placeholder='confirm password' />
+          <span className="error-message">
+            {this.state.errors.password2}
+          </span>
         </label>
-        <label className="loginForm__button">
-        <input type="submit" value="Registration" className="loginForm__button_item"/>
-        <RegistrationButton onClick={this.handleLoginClick} className="loginForm__button_item"/>
+        <input type="submit" value="SIGN ME UP" className="loginForm__button_item" />
+        <label>
+          <span> Already registered?  </span>
+          <Link to='/login'>Login</Link>
         </label>
       </form>
     );
   }
 }
 
-function RegistrationButton(props) {
-  return (
-    <button onClick={props.onClick}>
-      Already registered?
-    </button>
-  );
-}

@@ -1,42 +1,52 @@
 import React from 'react';
 import Login from '../Login';
+import Header from '../Header';
+import UserList from '../UserList';
+import UserProfile from '../UserProfile';
 import Registration from '../Registration';
-import Profile from '../Profile';
+import PrivateProfile from '../PrivateProfile';
+import { Switch, Route, Router, Redirect } from 'react-router-dom'
+import { createBrowserHistory } from "history";
+import { getIslogin } from "../../helpers"
 
 export default class Wrapper extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { 
-      displayedComponent: "login",
-    };
+    this.customHistory = createBrowserHistory();
+    this.state = {
+      isLogined: getIslogin(),
+    }
   }
 
-  handleDisplayedComponent = (component) => {
-    this.setState({ displayedComponent: component})
+  handleLogin = (isLogined = false) => {
+    this.setState({ isLogined })
   }
 
   render() {
-    const { displayedComponent } = this.state;
+    console.log('new render', this.state.isLogined)
     return (
-      <div>
-        <Authentification
-         displayedComponent={displayedComponent}
-         handleDisplayedComponent={this.handleDisplayedComponent} 
-         />
-      </div>
-    )
-  }
+      <Router history={this.customHistory}>
+        <Header history={this.customHistory} isLogined={this.state.isLogined} />
+        <Switch>
+          <Route path='/login' component={(props) => <Login {...props} handleLogin={this.handleLogin} />} />
+          <Route path='/registration' component={Registration} />
+          <Route path='/profile/me' component={PrivateProfile} />
+          <WithToken>
+            <Route path='/users' component={(props) => <UserList {...props} handleLogin={this.handleLogin} />} />
+            <Route path='/profile/:id' component={UserProfile} />
+            <Redirect from='/' to='/users' />
+          </WithToken>
+        </Switch>
+        <footer></footer>
+      </Router>
+    );
+  };
 }
 
-function Authentification(props) {
-  const { displayedComponent } = props;
-  switch(displayedComponent){
-    case "login":
-       return <Login {...props}/>;
-    case "registration":
-       return <Registration {...props}/>; 
-    case "profile":
-        return <Profile {...props}/>; 
-       default: return ;
+const WithToken = ({ children, defaultComponent = <Redirect to='/login' /> }) => {
+ 
+  if (getIslogin()) {
+    return children
   }
+  return defaultComponent
 }

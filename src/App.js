@@ -1,14 +1,11 @@
 import React from 'react';
 import './App.css';
-import Wrapper from '../src/components/Wrapper';
-import Profile from './components/Profile';
+import Wrapper  from '../src/components/Wrapper/index';
 
-class App extends React.Component {
-  render () {
-    return (
-      <Wrapper />
-      // <Profile />
-    )}
+const App = () => {
+  return <div className="display-data">
+    <Wrapper />
+  </div>
 }
 
 export default App;

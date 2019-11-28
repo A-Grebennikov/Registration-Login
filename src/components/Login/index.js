@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom'
 
 const loginURL = 'http://localhost:5000/api/users/login';
 
@@ -28,46 +29,43 @@ export default class Login extends React.Component {
       ...this.state,
     }).then(res => {
       localStorage.setItem('token', res.data.token);
-      this.props.handleDisplayedComponent("profile");
+      this.props.handleLogin(true);
+      this.props.history.push('/users');
     }).catch(err => {
-      const errors = err.response.data;
-      this.setState({email: '', password: '', errors: errors});
+      const errors = err.response ? err.response.data : {};
+      this.setState({ email: '', password: '', errors: errors });
     })
   }
 
   messsageError = () => {
-      if (this.state.errors) {
-        return <p>Incorrect email or password</p>
-      }
+    if (this.state.errors) {
+      return "Incorrect email or password"
+    }
   }
 
-  handleLoginClick = () => {
+  handleLoginClick() {
     this.props.handleDisplayedComponent("registration");
   }
 
   render() {
     return (
       <form onSubmit={this.submitUser} className="loginForm-container">
-        <label className="loginForm__areaError">{this.messsageError()}</label>
-        <label htmlFor="email" className="loginForm__label"> <span>Email</span>
-        <input id="email" value={this.state.email} onChange={this.updateForm} className="loginForm__input" placeholder='enter your email' />
+        <h1>Login</h1>
+        <label htmlFor="email" className="commonForm__label">
+          <input id="email" value={this.state.email} onChange={this.updateForm} className={`commonForm__input ${this.state.errors ? 'error' : ''}`} placeholder='e-mail' autocomplete="off" />
         </label>
-        <label htmlFor="password" className="loginForm__label"><span>Password</span>
-        <input id="password" value={this.state.password} onChange={this.updateForm} className="loginForm__input" placeholder='enter your password' />
+        <label htmlFor="password" className="commonForm__label">
+          <input id="password" type="password" value={this.state.password} onChange={this.updateForm} className={`commonForm__input ${this.state.errors ? 'error' : ''}`} placeholder='password' />
+          <span className="error-message">
+            {this.messsageError()}
+          </span>
         </label>
-        <label className="loginForm__button">
-        <input type="submit" value="Login" className="loginForm__button_item"/>
-        <LoginButton onClick={this.handleLoginClick} className="loginForm__button_item"/>
+        <input type="submit" value="Login" className="loginForm__button_item" />
+        <label>
+          <span>Not registered?  </span>
+          <Link to='/registration'>Create an account</Link>
         </label>
       </form>
     );
   }
-}
-
-function LoginButton(props) {
-  return (
-    <button onClick={props.onClick}>
-      Not registered?
-    </button>
-  );
 }
