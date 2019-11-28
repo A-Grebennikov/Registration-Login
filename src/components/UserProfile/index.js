@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 
+const userDataUrl = 'http://localhost:5000/api/users/userData';
 
 export default class Userprofile extends React.Component {
   constructor(props) {
@@ -13,7 +14,7 @@ export default class Userprofile extends React.Component {
 
   componentDidMount() {
     let token = localStorage.getItem('token');
-    axios.get('http://localhost:5000/api/users/userData',
+    axios.get(userDataUrl,
       {
         'headers': { 'authorization': token },
         'params': { id: this.state.id }

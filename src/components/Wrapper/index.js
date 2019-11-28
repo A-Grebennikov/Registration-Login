@@ -1,18 +1,20 @@
 import React from 'react';
 import Login from '../Login';
-import Registration from '../Registration';
+import Header from '../Header';
 import UserList from '../UserList';
 import UserProfile from '../UserProfile';
-import Header from '../Header';
+import Registration from '../Registration';
+import PrivateProfile from '../PrivateProfile';
 import { Switch, Route, Router, Redirect } from 'react-router-dom'
 import { createBrowserHistory } from "history";
+import { getIslogin } from "../../helpers"
 
 export default class Wrapper extends React.Component {
   constructor(props) {
     super(props);
     this.customHistory = createBrowserHistory();
     this.state = {
-      isLogined: false,
+      isLogined: getIslogin(),
     }
   }
 
@@ -21,14 +23,14 @@ export default class Wrapper extends React.Component {
   }
 
   render() {
-    console.log('new render')
+    console.log('new render', this.state.isLogined)
     return (
       <Router history={this.customHistory}>
         <Header history={this.customHistory} isLogined={this.state.isLogined} />
         <Switch>
           <Route path='/login' component={(props) => <Login {...props} handleLogin={this.handleLogin} />} />
           <Route path='/registration' component={Registration} />
-          {/* <Route path='/profile' component={} /> */}
+          <Route path='/profile/me' component={PrivateProfile} />
           <WithToken>
             <Route path='/users' component={(props) => <UserList {...props} handleLogin={this.handleLogin} />} />
             <Route path='/profile/:id' component={UserProfile} />
@@ -42,11 +44,8 @@ export default class Wrapper extends React.Component {
 }
 
 const WithToken = ({ children, defaultComponent = <Redirect to='/login' /> }) => {
-  let isLogined = false;
-  let token = localStorage.getItem('token');
-  if (token) isLogined = true;
-
-  if (isLogined) {
+ 
+  if (getIslogin()) {
     return children
   }
   return defaultComponent

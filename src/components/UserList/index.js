@@ -2,25 +2,25 @@ import React from 'react';
 import axios from 'axios';
 import '../../index.css';
 import { createID } from '../../helpers';
-const jwtDecode = require('jwt-decode');
+
+const userNameListURL = 'http://localhost:5000/api/users/username';
 
 export default class UserList extends React.Component {
   constructor(props) {
     super(props);
     this.handleLogoutClick = this.handleLogoutClick.bind(this);
     this.state = {
-      username: '',
       usernames: [],
-
     };
   }
 
   componentDidMount() {
     let token = localStorage.getItem('token');
-    axios.get('http://localhost:5000/api/users/username', { 'headers': { 'authorization': token } })
+    axios.get(userNameListURL, { 'headers': { 'authorization': token } })
       .then(response => {
-        const decoded = jwtDecode(token);
-        this.setState({ usernames: response.data, username: decoded.name })
+        this.setState({
+          usernames: response.data
+        })
       })
       .catch((error) => {
         this.props.history.push('/login');
@@ -41,12 +41,12 @@ export default class UserList extends React.Component {
 
   renderUsernames() {
     return this.state.usernames.map(item => (
-      <div className="profile-users" onClick={() => { this.showUserProfile(item._id) }}>
+      <div key={createID()} className="profile-users" onClick={() => { this.showUserProfile(item._id) }}>
         <div>
           <img className="logo-profile" src="http://s1.iconbird.com/ico/2013/11/504/w128h1281385326502profle.png" alt='some value' />
         </div>
         <div className="users-data">
-          <span className="users-data__name" key={createID("name")}>{item.name}</span>
+          <span className="users-data__name">{item.name}</span>
           <div className="users-data__email">
             <img className="logo-email" src="https://cdn.icon-icons.com/icons2/788/PNG/512/email_icon-icons.com_64925.png" alt='some value' />
             <span> {item.email}</span>

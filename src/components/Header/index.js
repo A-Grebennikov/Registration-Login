@@ -1,7 +1,6 @@
 import React from "react";
 
 export default class Header extends React.Component {
-
   login = () => {
     this.props.history.push('/login');
   }
@@ -21,20 +20,21 @@ export default class Header extends React.Component {
   render() {
     const { isLogined } = this.props;
     if (isLogined) {
-      return <isLoginned login={this.login} registration={this.registration} />
+      return <Loginned userList={this.userList} userProfile={this.userProfile} history={this.props.history}/>
     } else {
       return <NotLoginned login={this.login} registration={this.registration} />
     }
   }
 }
 
-const isLoginned = ({ userList, userProfile }) => {
+const Loginned = ({ userList, userProfile, history }) => {
   return <div className="header-loginned">
     <input type="button" className="user-list_button" onClick={() => { userList() }} value="User list" />
-    <select className="action-user_select">
+    <input type="button" className="user-list_button" onClick={() => history.push('/profile/me') } value="Profile" />
+    {/* <select className="action-user_select">
       <option><input type="button" className="actiun-user_select" onClick={() => { userProfile() }} value="userProfile" /></option>
       <option><span>logout</span></option>
-    </select>
+    </select> */}
   </div>
 }
 
