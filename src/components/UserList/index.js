@@ -16,7 +16,9 @@ export default class UserList extends React.Component {
 
   componentDidMount() {
     let token = localStorage.getItem('token');
-    axios.get(userNameListURL, { 'headers': { 'authorization': token } })
+    axios.get(userNameListURL, { 
+      headers: { 'authorization': token } 
+    })
       .then(response => {
         this.setState({
           usernames: response.data
@@ -29,7 +31,6 @@ export default class UserList extends React.Component {
   }
 
   handleLogoutClick() {
-    console.log(this.props);
     this.props.handleLogin(false);
     this.props.history.push('/login')
     localStorage.removeItem('token');

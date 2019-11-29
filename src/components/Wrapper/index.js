@@ -23,10 +23,9 @@ export default class Wrapper extends React.Component {
   }
 
   render() {
-    console.log('new render', this.state.isLogined)
     return (
       <Router history={this.customHistory}>
-        <Header history={this.customHistory} isLogined={this.state.isLogined} />
+        <Header history={this.customHistory} isLogined={this.state.isLogined} handleLogin={this.handleLogin}/>
         <Switch>
           <Route path='/login' component={(props) => <Login {...props} handleLogin={this.handleLogin} />} />
           <Route path='/registration' component={Registration} />

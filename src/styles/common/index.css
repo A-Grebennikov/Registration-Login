@@ -5,11 +5,6 @@
   margin: 5px 0;
 }
 
-/* .wrapper {
-  height: 100%;
-  width: 100%;
-} */
-
 .commonForm__input {
   border: 1px solid #cccccc;
   border-radius: 3px;
@@ -61,6 +56,11 @@
   display: flex;
 }
 
+.column {
+  display: flex;
+  flex-direction: column;
+}
+
 .center {
   justify-content: center;
   align-items: center;
@@ -74,3 +74,6 @@
   justify-content: center;
 }
 
+.justify-betwen {
+  justify-content: space-between;
+}
