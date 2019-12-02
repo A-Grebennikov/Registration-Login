@@ -9,6 +9,7 @@ export default class Userprofile extends React.Component {
     this.state = {
       userData: [],
       id: this.props.match.params.id,
+      isLoaded: false,
     };
   }
 
@@ -21,7 +22,7 @@ export default class Userprofile extends React.Component {
       }
     )
       .then(response => {
-        this.setState({ userData: response.data });
+        this.setState({ userData: response.data, isLoaded: true });
       })
       .catch((err) => {
         console.log('err', err)
@@ -33,10 +34,14 @@ export default class Userprofile extends React.Component {
   }
 
   render() {
+    const { isLoaded } = this.state;
+    if (!isLoaded) {
+      return <h1>Loading...</h1>
+    }
     return (
       <div className="user-profile-container">
         <div className="header__userProfile-container">
-          <img className="header__logo-profile" src="http://s1.iconbird.com/ico/2013/11/504/w128h1281385326502profle.png" alt='some value' />
+          <img className="header__logo-profile" src={this.state.userData.avatar} alt='some value' />
           <h1 className="headline__header__userProfile-container">Personal data</h1>
           <div>
             <input type="button" className="header__back-button" onClick={() => { this.showUserList() }} />

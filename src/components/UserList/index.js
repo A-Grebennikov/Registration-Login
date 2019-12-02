@@ -44,7 +44,7 @@ export default class UserList extends React.Component {
     return this.state.usernames.map(item => (
       <div key={createID()} className="profile-users" onClick={() => { this.showUserProfile(item._id) }}>
         <div>
-          <img className="logo-profile" src="http://s1.iconbird.com/ico/2013/11/504/w128h1281385326502profle.png" alt='some value' />
+          <img className="logo-profile" src={item.avatar} alt='some value' />
         </div>
         <div className="users-data">
           <span className="users-data__name">{item.name}</span>

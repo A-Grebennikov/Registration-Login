@@ -4,6 +4,7 @@ import axios from 'axios';
 const jwtDecode = require('jwt-decode');
 const editPrivateProfileURL = "http://localhost:5000/api/users/editProfile";
 const userDataUrl = 'http://localhost:5000/api/users/userData';
+// const userAvatar = 'http://localhost:5000/api/users/getImage';
 
 export default class PrivateProfile extends React.Component {
   constructor(props) {
@@ -16,6 +17,39 @@ export default class PrivateProfile extends React.Component {
       userData: {},
       id: decoded.id,
       username: '',
+      isLoaded: false
+    }
+  }
+
+  componentDidMount() {
+    axios.get(userDataUrl,
+      {
+        headers: { 'authorization': this.token },
+        params: { id: this.state.id }
+      })
+      .then(response => {
+        this.setState({ userData: response.data, username: response.data.name, isLoaded: true });
+      })
+      .catch((err) => {
+        console.log('err', err)
+      });
+  }
+
+  getData = (input) => {
+    var file = document.querySelector('input[type=file]').files[0];
+    var reader = new FileReader();
+
+    reader.onloadend = () => {
+      const base64Image = reader.result;
+      const { userData } = this.state;
+      userData.avatar = base64Image;
+      this.setState({userData})
+    }
+
+    if (file) {
+      reader.readAsDataURL(file);
+    } else {
+      
     }
   }
 
@@ -27,26 +61,10 @@ export default class PrivateProfile extends React.Component {
     })
   }
 
-  componentDidMount() {
-    axios.get(userDataUrl,
-      {
-        headers: { 'authorization': this.token },
-        params: { id: this.state.id }
-      })
-      .then(response => {
-        this.setState({ userData: response.data, username: response.data.name });
-      })
-      .catch((err) => {
-        console.log('err', err)
-      });
-  }
 
   editUserData = (event) => {
     event.preventDefault();
-    // console.log('id', this.state.id);
-    // console.log('token', this.token);
-    // console.log('data', JSON.stringify(this.state.userData))
-    axios.put(editPrivateProfileURL, 
+    axios.put(editPrivateProfileURL,
       this.state.userData, {
       headers: { 'authorization': this.token },
       params: { id: this.state.id }
@@ -66,10 +84,14 @@ export default class PrivateProfile extends React.Component {
   }
 
   render() {
+    const { isLoaded } = this.state;
+    
+    if (!isLoaded) return <h1>Loading...</h1>
+
     return (
       <form className="user-profile-container" onSubmit={this.editUserData}>
         <div className="header__userProfile-container">
-          <img className="header__logo-profile" src="http://s1.iconbird.com/ico/2013/11/504/w128h1281385326502profle.png" alt='some value' />
+          <img className="header__logo-profile" src={this.state.userData.avatar} alt='some value' />
           <h1 className="headline__header__userProfile-container">Profile user {this.state.username}</h1>
           <div className="flex">
             <input type="button" className="header__back-button" onClick={() => { this.showUserList() }} />
@@ -95,11 +117,12 @@ export default class PrivateProfile extends React.Component {
           <div>
             <span className="user-label">About user</span>
             <div className="flex justify-betwen">
-            <input id="about" className="user-info flex justify-start editForm__input" value={this.state.userData.about || ''} onChange={this.updateForm} />
-            <input type="submit" className="header__save-button" value="" />
+              <input id="about" className="user-info flex justify-start editForm__input" value={this.state.userData.about || ''} onChange={this.updateForm} />
+              <input type="submit" className="header__save-button" value="" />
             </div>
           </div>
         </div>
+        <input type="file" name="avatar" onChange={this.getData} />
       </form>
     );
   }
